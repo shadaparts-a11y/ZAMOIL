@@ -1,492 +1,172 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ku" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZAMOIL | Official Valvoline Distributor & Auto Parts Catalog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>زامۆیل | ڤالڤۆلین و فلتەری ئۆتۆمۆبیل</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Google Fonts (Rabar / Noto Sans Arabic for Kurdish Sorani) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
                         brand: {
-                            red: '#E31837', // Valvoline Red accent
-                            reddark: '#BA0C2F',
-                            blue: '#00529B', // Valvoline Blue accent
-                            darkslate: '#0F172A',
-                            cardbg: '#1E293B',
-                            lightbg: '#F8FAFC'
+                            red: '#E31837',
+                            blue: '#002B49',
+                            dark: '#0B132B'
                         }
                     },
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
+                        sans: ['Noto Sans Arabic', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
     <style>
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #1e293b;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #475569;
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #64748b;
-        }
+        body { font-family: 'Noto Sans Arabic', sans-serif; }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-brand-red selection:text-white">
+<body class="bg-slate-950 text-slate-100 min-h-screen pb-32">
 
-    <!-- Top Header Navigation -->
-    <header class="sticky top-0 z-30 bg-slate-900/95 backdrop-blur border-b border-slate-800 shadow-xl">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <!-- Brand Logo & Badge -->
-                <div class="flex items-center space-x-3">
-                    <div class="bg-brand-red text-white p-2.5 rounded-xl font-black text-2xl tracking-tighter shadow-lg shadow-brand-red/30 flex items-center justify-center">
-                        <i class="fa-solid fa-oil-can mr-2"></i>
-                        <span>ZAM<span class="text-slate-900 bg-white px-1 ml-1 rounded">OIL</span></span>
-                    </div>
-                    <div class="hidden sm:flex flex-col border-l border-slate-700 pl-3">
-                        <span class="text-xs uppercase font-extrabold text-brand-red tracking-widest">Official Distributor</span>
-                        <span class="text-sm font-bold text-slate-200">Valvoline™ Lubricants & OEM Parts</span>
-                    </div>
+    <!-- Mobile Header -->
+    <header class="sticky top-0 z-30 bg-slate-900 border-b border-slate-800 shadow-lg px-4 py-3">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2 space-x-reverse">
+                <div class="bg-brand-red text-white p-2 rounded-xl text-lg font-black shadow-md">
+                    <i class="fa-solid fa-oil-can"></i>
                 </div>
-
-                <!-- Right Actions -->
-                <div class="flex items-center space-x-3">
-                    <button id="configBtn" onclick="openConfigModal()" class="p-2.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition" title="Store Settings">
-                        <i class="fa-solid fa-gear text-lg"></i>
-                    </button>
-                    
-                    <!-- Order Drawer Trigger Button -->
-                    <button id="openCartBtn" onclick="toggleCartDrawer(true)" class="relative inline-flex items-center justify-center px-4 py-2.5 border border-transparent text-sm font-bold rounded-xl text-white bg-gradient-to-r from-brand-red to-brand-reddark hover:from-red-600 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-red shadow-lg transition-all duration-200">
-                        <i class="fa-solid fa-list-check mr-2"></i>
-                        <span>My Order List</span>
-                        <span id="cartBadge" class="ml-2 bg-white text-brand-red text-xs font-black px-2 py-0.5 rounded-full shadow-inner">0</span>
-                    </button>
+                <div>
+                    <h1 class="text-lg font-extrabold tracking-tight text-white">زامۆیل <span class="text-xs bg-brand-red px-1.5 py-0.5 rounded text-white">فەرمی</span></h1>
+                    <p class="text-[11px] text-slate-400">بریکاری سەرەکی ڤالڤۆلین لە سلێمانی</p>
                 </div>
             </div>
+
+            <!-- Settings / Phone Config Button -->
+            <button onclick="openConfigModal()" class="p-2 bg-slate-800 text-slate-300 rounded-xl text-sm">
+                <i class="fa-solid fa-gear"></i>
+            </button>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="mt-3 relative">
+            <span class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </span>
+            <input type="text" id="searchInput" oninput="filterProducts()" placeholder="گەڕان بەدوای ڕۆن، ڤیسکۆسیتی یان فلتەر..." class="w-full pr-10 pl-4 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-red">
         </div>
     </header>
 
-    <!-- Main Container -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+    <!-- Categories Horizontal Scroll -->
+    <div class="bg-slate-900/80 backdrop-blur border-b border-slate-800 px-4 py-2.5 flex space-x-2 space-x-reverse overflow-x-auto scrollbar-none">
+        <button onclick="setCategory('all', this)" class="cat-btn active px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap bg-brand-red text-white transition">هەموو بەرهەمەکان</button>
+        <button onclick="setCategory('Engine Oil', this)" class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap bg-slate-800 text-slate-300 transition">ڕۆنی مەکینە</button>
+        <button onclick="setCategory('Filter', this)" class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap bg-slate-800 text-slate-300 transition">فلتەر</button>
+        <button onclick="setCategory('Transmission', this)" class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap bg-slate-800 text-slate-300 transition">ڕۆنی گێر</button>
+    </div>
 
-        <!-- Banner / Announcement -->
-        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-brand-darkslate border border-slate-700 shadow-2xl p-6 sm:p-8">
-            <div class="absolute right-0 top-0 bottom-0 w-1/3 opacity-10 pointer-events-none flex items-center justify-center">
-                <i class="fa-solid fa-car-battery text-9xl text-white"></i>
-            </div>
-            <div class="relative z-10 max-w-2xl">
-                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-brand-red/20 text-brand-red border border-brand-red/30 mb-3">
-                    <i class="fa-solid fa-bolt mr-1.5"></i> Fast Wholesale & Retail Ordering
-                </span>
-                <h1 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">Select Products & Send Order Direct to WhatsApp</h1>
-                <p class="mt-2 text-sm sm:text-base text-slate-300">
-                    Find genuine Valvoline motor oils, filters, and automotive fluids. Choose your quantities and generate an instant order list for quick checkout!
-                </p>
-            </div>
-        </div>
-
-        <!-- Filter & Search Section -->
-        <div class="bg-slate-900 p-4 sm:p-6 rounded-2xl border border-slate-800 shadow-lg space-y-4">
-            
-            <!-- Top Bar: Search + Viscosity Dropdown -->
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
-                <!-- Search Input -->
-                <div class="relative md:col-span-6">
-                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </div>
-                    <input type="text" id="searchInput" oninput="applyFilters()" placeholder="Search product name, part number, OEM spec..." class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red transition">
-                </div>
-
-                <!-- Viscosity Spec Quick Finder -->
-                <div class="md:col-span-3">
-                    <select id="viscosityFilter" onchange="applyFilters()" class="w-full py-3 px-3.5 bg-slate-950 border border-slate-700 rounded-xl text-slate-200 focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red transition font-medium">
-                        <option value="">All Oil Viscosities / Specs</option>
-                        <option value="0W-20">0W-20 (Fuel Economy)</option>
-                        <option value="5W-30">5W-30 (Standard Synthetic)</option>
-                        <option value="5W-40">5W-40 (Euro / Performance)</option>
-                        <option value="10W-40">10W-40 (High Mileage)</option>
-                        <option value="15W-40">15W-40 / Heavy Duty</option>
-                        <option value="ATF">Transmission / Gear Fluid</option>
-                    </select>
-                </div>
-
-                <!-- Manufacturer Approval Filter -->
-                <div class="md:col-span-3">
-                    <select id="specFilter" onchange="applyFilters()" class="w-full py-3 px-3.5 bg-slate-950 border border-slate-700 rounded-xl text-slate-200 focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red transition font-medium">
-                        <option value="">All OEM Specs / Brands</option>
-                        <option value="BMW">BMW LL-01 / LL-04</option>
-                        <option value="MB">Mercedes-Benz 229.5</option>
-                        <option value="VW">VW 504.00 / 507.00</option>
-                        <option value="Hengst">Hengst Filters</option>
-                        <option value="Brembo">Brembo Brakes</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Category Pills / Tabs -->
-            <div class="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none pt-1" id="categoryTabs">
-                <button onclick="setCategory('ALL')" class="cat-tab active px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap bg-brand-red text-white transition">
-                    <i class="fa-solid fa-border-all mr-1.5"></i> All Products
-                </button>
-                <button onclick="setCategory('Valvoline Motor Oils')" class="cat-tab px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition">
-                    <i class="fa-solid fa-oil-can mr-1.5 text-brand-red"></i> Valvoline Motor Oils
-                </button>
-                <button onclick="setCategory('Transmission & Gear')" class="cat-tab px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition">
-                    <i class="fa-solid fa-gears mr-1.5 text-blue-400"></i> Transmission & Fluids
-                </button>
-                <button onclick="setCategory('Filters')" class="cat-tab px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition">
-                    <i class="fa-solid fa-filter mr-1.5 text-emerald-400"></i> Oil & Air Filters
-                </button>
-                <button onclick="setCategory('Brake System')" class="cat-tab px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition">
-                    <i class="fa-solid fa-disc-drive mr-1.5 text-amber-400"></i> Brake Systems
-                </button>
-                <button onclick="setCategory('General Service')" class="cat-tab px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition">
-                    <i class="fa-solid fa-wrench mr-1.5 text-purple-400"></i> Service & Additives
-                </button>
+    <!-- Main Products Vertical List (Optimized for Mobile Phone Screens) -->
+    <main class="p-4 max-w-2xl mx-auto">
+        <div id="productGrid" class="space-y-3">
+            <!-- Loading state -->
+            <div class="text-center py-20 text-slate-500">
+                <i class="fa-solid fa-spinner fa-spin text-3xl mb-2 text-brand-red"></i>
+                <p class="text-xs">لە کاتی بارکردنی زانیارییەکان...</p>
             </div>
         </div>
 
-        <!-- Products Grid Container -->
-        <div>
-            <div class="flex items-center justify-between mb-4">
-                <h2 class="text-xl font-bold text-white flex items-center">
-                    <span>Available Catalog</span>
-                    <span id="productCountBadge" class="ml-2 text-xs font-semibold bg-slate-800 text-slate-400 px-2.5 py-1 rounded-full border border-slate-700">0 items</span>
-                </h2>
-                <div class="text-xs text-slate-400">
-                    Official Valvoline Sulaymaniyah Inventory
-                </div>
-            </div>
-
-            <!-- Grid -->
-            <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                <!-- Product cards dynamically inserted here -->
-            </div>
-
-            <!-- Empty State -->
-            <div id="emptyState" class="hidden text-center py-16 bg-slate-900/50 rounded-2xl border border-dashed border-slate-800">
-                <i class="fa-solid fa-magnifying-glass text-5xl text-slate-600 mb-3"></i>
-                <h3 class="text-lg font-bold text-slate-300">No products found</h3>
-                <p class="text-sm text-slate-500 mt-1">Try resetting your filters or search term.</p>
-                <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-sm font-semibold rounded-xl text-slate-200 transition">Reset All Filters</button>
-            </div>
+        <!-- Empty state -->
+        <div id="emptyState" class="hidden text-center py-16 bg-slate-900 rounded-2xl border border-slate-800 p-6">
+            <i class="fa-solid fa-box-open text-4xl text-slate-600 mb-2"></i>
+            <h3 class="text-sm font-bold text-slate-300">هیچ بەرهەمێک نەدۆزراوەتەوە</h3>
+            <p class="text-xs text-slate-500 mt-1">تکایە ناو یان جۆری گەڕانەکەت بگۆڕە</p>
         </div>
     </main>
 
-    <!-- WhatsApp Order Drawer / Sidebar Overlay -->
-    <div id="cartDrawerBackdrop" onclick="toggleCartDrawer(false)" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-40 hidden transition-opacity"></div>
-
-    <aside id="cartDrawer" class="fixed top-0 right-0 bottom-0 w-full sm:w-[450px] bg-slate-900 border-l border-slate-800 z-50 shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 ease-in-out">
-        
-        <!-- Drawer Header -->
-        <div class="p-5 border-b border-slate-800 flex items-center justify-between bg-slate-950">
-            <div class="flex items-center space-x-2">
-                <div class="bg-brand-red text-white p-2 rounded-lg">
-                    <i class="fa-solid fa-list-check"></i>
-                </div>
-                <div>
-                    <h3 class="text-lg font-extrabold text-white">Your Order List</h3>
-                    <p class="text-xs text-slate-400">Review items before exporting to WhatsApp</p>
-                </div>
-            </div>
-            <button onclick="toggleCartDrawer(false)" class="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
-        </div>
-
-        <!-- Order Items Scroll Area -->
-        <div id="cartItemsContainer" class="flex-grow overflow-y-auto p-5 space-y-3">
-            <!-- Dynamic Cart Items Here -->
-        </div>
-
-        <!-- Drawer Footer & Actions -->
-        <div class="p-5 border-t border-slate-800 bg-slate-950 space-y-4">
-            <!-- Quick Summary -->
-            <div class="flex items-center justify-between text-sm text-slate-300 font-semibold">
-                <span>Total Items Selected:</span>
-                <span id="drawerTotalCount" class="text-brand-red font-extrabold text-lg">0</span>
-            </div>
-
-            <!-- Additional Notes Input -->
+    <!-- Fixed Bottom Sticky Order Bar -->
+    <div class="fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 p-4 shadow-2xl z-40">
+        <div class="max-w-2xl mx-auto flex items-center justify-between gap-3">
             <div>
-                <label for="orderNotes" class="block text-xs font-semibold text-slate-400 mb-1">Customer / Garage Name or Notes (Optional)</label>
-                <textarea id="orderNotes" rows="2" placeholder="e.g. Garage AutoRepair LLC - Delivery needed by 2 PM" class="w-full p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red"></textarea>
+                <span class="text-xs text-slate-400 block">بڕی هەڵبژێردراو:</span>
+                <span id="totalSelectedCount" class="text-sm font-extrabold text-brand-red">٠ بەرهەم</span>
             </div>
-
-            <!-- WhatsApp Direct Send Button -->
-            <button onclick="sendOrderViaWhatsApp()" class="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-sm rounded-xl shadow-lg shadow-emerald-900/30 flex items-center justify-center space-x-2 transition duration-200">
-                <i class="fa-brands fa-whatsapp text-xl"></i>
-                <span>SEND ORDER VIA WHATSAPP</span>
-            </button>
-
-            <button onclick="clearCart()" class="w-full py-2 text-xs font-semibold text-slate-500 hover:text-slate-300 transition text-center">
-                <i class="fa-solid fa-trash-can mr-1"></i> Clear entire order list
+            <button onclick="sendOrderViaWhatsApp()" class="flex-grow py-3 px-4 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-xl shadow-lg flex items-center justify-center space-x-2 space-x-reverse transition">
+                <i class="fa-brands fa-whatsapp text-lg"></i>
+                <span>ناردنی داواکاری بۆ وەتسአپ</span>
             </button>
         </div>
-    </aside>
+    </div>
 
-    <!-- Configuration Modal (For Phone Number Setup) -->
+    <!-- Configuration Modal -->
     <div id="configModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                <h3 class="text-lg font-bold text-white flex items-center">
-                    <i class="fa-solid fa-sliders text-brand-red mr-2"></i> Store Contact Config
-                </h3>
-                <button onclick="closeConfigModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-5 space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                <h3 class="text-sm font-bold text-white">ڕێکخستنی ژمارەی وەتسአپ</h3>
+                <button onclick="closeConfigModal()" class="text-slate-400"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <p class="text-xs text-slate-400">Configure your store's WhatsApp number where customers will send their generated order list.</p>
-            
             <div>
-                <label class="block text-xs font-semibold text-slate-300 mb-1">WhatsApp Phone Number (with Country Code)</label>
-                <input type="text" id="storePhoneInput" placeholder="e.g. 9647501234567" class="w-full p-3 bg-slate-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-brand-red">
-                <span class="text-[11px] text-slate-500 mt-1 block">Do not use '+' signs or dashes. e.g. 9647501234567</span>
+                <label class="block text-[11px] text-slate-400 mb-1">ژمارەی مۆبایل (بە کۆدی وڵات، بێ پڵەس):</label>
+                <input type="text" id="storePhoneInput" placeholder="9647501234567" class="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white">
             </div>
-
-            <div class="pt-2 flex justify-end space-x-2">
-                <button onclick="closeConfigModal()" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-xs font-semibold hover:bg-slate-700">Cancel</button>
-                <button onclick="saveConfig()" class="px-4 py-2 bg-brand-red text-white rounded-xl text-xs font-semibold hover:bg-red-600">Save Phone Number</button>
-            </div>
+            <button onclick="saveConfig()" class="w-full py-2.5 bg-brand-red text-white text-xs font-bold rounded-xl">پاشەکەوتکردن</button>
         </div>
     </div>
 
-    <!-- Notification Toast -->
-    <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl shadow-2xl z-50 flex items-center space-x-2 opacity-0 pointer-events-none transition-all duration-300">
-        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
-        <span id="toastMsg" class="text-sm font-semibold">Added to list!</span>
-    </div>
-
-    <!-- Application Script -->
+    <!-- JavaScript Application Logic -->
     <script>
-        // Catalog Database
-        const sampleProducts = [
-            {
-                id: 'valv-syn-5w30-5l',
-                name: 'Valvoline SynPower 5W-30 Full Synthetic',
-                category: 'Valvoline Motor Oils',
-                viscosity: '5W-30',
-                spec: 'BMW LL-01 / MB 229.5 / VW 502.00',
-                sku: 'VAL-885401',
-                size: '5 Liters',
-                badge: 'Best Seller',
-                icon: 'fa-bottle-droplet',
-                desc: 'Premium full synthetic engine oil formulated for ultimate protection under modern high-heat conditions.'
-            },
-            {
-                id: 'valv-maxlife-10w40-4l',
-                name: 'Valvoline MaxLife 10W-40 High Mileage',
-                category: 'Valvoline Motor Oils',
-                viscosity: '10W-40',
-                spec: 'ACEA A3/B4 / API SP',
-                sku: 'VAL-798102',
-                size: '4 Liters',
-                badge: 'High Mileage',
-                icon: 'fa-bottle-droplet',
-                desc: 'Specially engineered for engines over 100,000 km with seal conditioners to stop leaks.'
-            },
-            {
-                id: 'valv-mst-5w40-5l',
-                name: 'Valvoline SynPower MST C3 5W-40',
-                category: 'Valvoline Motor Oils',
-                viscosity: '5W-40',
-                spec: 'BMW LL-04 / MB 229.51',
-                sku: 'VAL-884320',
-                size: '5 Liters',
-                badge: 'Euro Diesel & Petrol',
-                icon: 'fa-bottle-droplet',
-                desc: 'Low SAPS synthetic technology designed for modern Euro emissions standards and DPF systems.'
-            },
-            {
-                id: 'valv-fe-0w20-5l',
-                name: 'Valvoline SynPower FE 0W-20',
-                category: 'Valvoline Motor Oils',
-                viscosity: '0W-20',
-                spec: 'API SP / ILSAC GF-6A',
-                sku: 'VAL-891004',
-                size: '5 Liters',
-                badge: 'Fuel Economy',
-                icon: 'fa-bottle-droplet',
-                desc: 'Ultra-low viscosity formula maximizing fuel efficiency for modern Japanese and American engines.'
-            },
-            {
-                id: 'valv-allfleet-15w40-20l',
-                name: 'Valvoline All-Fleet Extra 15W-40 Heavy Duty',
-                category: 'Valvoline Motor Oils',
-                viscosity: '15W-40',
-                spec: 'API CK-4 / Cummins CES 20086',
-                sku: 'VAL-812999',
-                size: '20 Liters Pail',
-                badge: 'Commercial Fleet',
-                icon: 'fa-truck-field',
-                desc: 'Heavy duty diesel engine oil built for trucks, buses, and heavy agricultural machinery.'
-            },
-            {
-                id: 'valv-atf-maxlife-1l',
-                name: 'Valvoline Light Duty MaxLife ATF',
-                category: 'Transmission & Gear',
-                viscosity: 'ATF',
-                spec: 'Dexron VI / Mercon LV / MB 236.x',
-                sku: 'VAL-667204',
-                size: '1 Liter',
-                badge: 'Multi-Vehicle',
-                icon: 'fa-gears',
-                desc: 'Full synthetic automatic transmission fluid formulated to extend transmission longevity.'
-            },
-            {
-                id: 'valv-gear-75w90-1l',
-                name: 'Valvoline Heavy Duty Gear Oil 75W-90',
-                category: 'Transmission & Gear',
-                viscosity: 'ATF',
-                spec: 'API GL-5 / MT-1',
-                sku: 'VAL-772109',
-                size: '1 Liter',
-                badge: 'Extreme Pressure',
-                icon: 'fa-gears',
-                desc: 'Extreme pressure gear lubricant designed for differentials and heavy manual gearboxes.'
-            },
-            {
-                id: 'hengst-oil-filter-e115h',
-                name: 'Hengst Premium Oil Filter Cartridge',
-                category: 'Filters',
-                viscosity: 'N/A',
-                spec: 'Hengst / BMW N20, N55 Series',
-                sku: 'HNG-E115H-D155',
-                size: 'Single Unit',
-                badge: 'OEM Quality',
-                icon: 'fa-filter',
-                desc: 'High filtration capacity paper filter element manufactured to exact OEM German specifications.'
-            },
-            {
-                id: 'hengst-air-filter-e498l',
-                name: 'Hengst Engine Air Filter Element',
-                category: 'Filters',
-                viscosity: 'N/A',
-                spec: 'Hengst / MB 2.0T M274',
-                sku: 'HNG-E498L',
-                size: 'Single Unit',
-                badge: 'Clean Intake',
-                icon: 'fa-wind',
-                desc: 'Superior dust holding capacity ensuring maximum airflow and clean engine combustion.'
-            },
-            {
-                id: 'brembo-brake-pads-front',
-                name: 'Brembo Low-Metallic Brake Pads Set',
-                category: 'Brake System',
-                viscosity: 'N/A',
-                spec: 'Brembo / BMW 3-Series F30',
-                sku: 'BRM-P06075',
-                size: 'Axle Set (4 pcs)',
-                badge: 'High Performance',
-                icon: 'fa-disc-drive',
-                desc: 'High-friction brake pad compound engineered for high stopping power and low rotor wear.'
-            },
-            {
-                id: 'valv-brake-fluid-dot4-1l',
-                name: 'Valvoline Brake Fluid DOT 4',
-                category: 'Brake System',
-                viscosity: 'N/A',
-                spec: 'FMVSS 116 / ISO 4925 Class 4',
-                sku: 'VAL-551020',
-                size: '1 Liter',
-                badge: 'High Dry Boiling Pt',
-                icon: 'fa-flask',
-                desc: 'High-boiling point hydraulic brake fluid protecting against vapor lock and corrosion.'
-            },
-            {
-                id: 'valv-radiator-coolant-5l',
-                name: 'Valvoline Multi-Vehicle Coolant Ready-to-Use',
-                category: 'General Service',
-                viscosity: 'N/A',
-                spec: 'HOAT/OAT Universal Formula',
-                sku: 'VAL-441908',
-                size: '5 Liters',
-                badge: '-37°C Protection',
-                icon: 'fa-temperature-arrow-down',
-                desc: 'Pre-mixed engine coolant providing universal protection against freezing, boiling, and rust.'
-            }
-        ];
+        // STEP: Paste your Google Sheet ID inside the quotes below
+        const SHEET_ID = '1W1YMF6mBYz2C7GK4LJ1D0ytO4y1sQCZ0dxR451gsP9k';
+        
+        // STEP: Your WhatsApp number default
+        let storePhoneNumber = localStorage.getItem('zamoil_phone') || '9647500000000';
 
-        // Application State
-        let cart = [];
-        let currentCategory = 'ALL';
-        let storePhoneNumber = localStorage.getItem('valv_store_phone') || '9647500000000';
+        let productsData = [];
+        let cart = {}; // stores product ID and quantity
+        let activeCategory = 'all';
 
-        // Initialization
         window.addEventListener('DOMContentLoaded', () => {
-            loadCartFromStorage();
-            renderProducts();
-            updateCartUI();
             document.getElementById('storePhoneInput').value = storePhoneNumber;
+            fetchGoogleSheetData();
         });
 
-        // Filter Logic
-        function setCategory(cat) {
-            currentCategory = cat;
-            const tabs = document.querySelectorAll('.cat-tab');
-            tabs.forEach(tab => {
-                if (tab.innerText.includes(cat) || (cat === 'ALL' && tab.innerText.includes('All Products'))) {
-                    tab.classList.remove('bg-slate-800', 'text-slate-300');
-                    tab.classList.add('bg-brand-red', 'text-white');
-                } else {
-                    tab.classList.remove('bg-brand-red', 'text-white');
-                    tab.classList.add('bg-slate-800', 'text-slate-300');
-                }
-            });
-            applyFilters();
+        async function fetchGoogleSheetData() {
+            try {
+                const res = await fetch(`https://opensheet.elk.sh/${SHEET_ID}/1`);
+                productsData = await res.json();
+                renderProducts();
+            } catch (err) {
+                document.getElementById('productGrid').innerHTML = `
+                    <div class="text-center py-12 text-red-400 text-xs">
+                        هەڵە لە بارکردنی زانیارییەکان. دڵنیابە لەوەی گووگڵ شیتەکەت بۆ هەموان کراوعەیە (Anyone with the link).
+                    </div>
+                `;
+            }
         }
 
-        function applyFilters() {
-            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
-            const viscosityQuery = document.getElementById('viscosityFilter').value;
-            const specQuery = document.getElementById('specFilter').value.toLowerCase();
-
-            const filtered = sampleProducts.filter(p => {
-                const matchesCategory = (currentCategory === 'ALL' || p.category === currentCategory);
-                const matchesSearch = p.name.toLowerCase().includes(searchQuery) || 
-                                      p.sku.toLowerCase().includes(searchQuery) ||
-                                      p.spec.toLowerCase().includes(searchQuery);
-                const matchesViscosity = !viscosityQuery || p.viscosity === viscosityQuery;
-                const matchesSpec = !specQuery || p.spec.toLowerCase().includes(specQuery) || p.name.toLowerCase().includes(specQuery);
-
-                return matchesCategory && matchesSearch && matchesViscosity && matchesSpec;
-            });
-
-            renderProducts(filtered);
-        }
-
-        function resetFilters() {
-            document.getElementById('searchInput').value = '';
-            document.getElementById('viscosityFilter').value = '';
-            document.getElementById('specFilter').value = '';
-            setCategory('ALL');
-        }
-
-        // Render Products Grid
-        function renderProducts(productsToRender = sampleProducts) {
-            const grid = document.getElementById('productsGrid');
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
             const emptyState = document.getElementById('emptyState');
-            const countBadge = document.getElementById('productCountBadge');
-
-            countBadge.innerText = `${productsToRender.length} items`;
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            
             grid.innerHTML = '';
 
-            if (productsToRender.length === 0) {
+            const filtered = productsData.filter((item, index) => {
+                const title = (item.Title || '').toLowerCase();
+                const spec = (item.Spec || '').toLowerCase();
+                const cat = (item.Category || '').trim();
+
+                const matchesSearch = title.includes(query) || spec.includes(query);
+                const matchesCat = activeCategory === 'all' || cat.toLowerCase() === activeCategory.toLowerCase();
+
+                return matchesSearch && matchesCat;
+            });
+
+            if (filtered.length === 0) {
                 grid.classList.add('hidden');
                 emptyState.classList.remove('hidden');
                 return;
@@ -495,230 +175,102 @@
             grid.classList.remove('hidden');
             emptyState.classList.add('hidden');
 
-            productsToRender.forEach(product => {
-                const cartItem = cart.find(item => item.id === product.id);
-                const currentQty = cartItem ? cartItem.qty : 0;
+            filtered.forEach((item, index) => {
+                const qty = cart[index] || 0;
+                const imgSrc = item.ImageURL || 'https://via.placeholder.com/150?text=ZAMOIL';
 
                 const cardHtml = `
-                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between hover:border-slate-700 transition duration-200 group relative">
-                        <div>
-                            <div class="flex items-center justify-between mb-3">
-                                <span class="bg-brand-red/10 text-brand-red border border-brand-red/30 text-[11px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wider">
-                                    ${product.badge}
-                                </span>
-                                <span class="text-xs text-slate-400 font-mono">SKU: ${product.sku}</span>
-                            </div>
-
-                            <div class="flex items-start space-x-3 mb-3">
-                                <div class="bg-slate-800 text-brand-red p-3 rounded-xl border border-slate-700 group-hover:bg-brand-red group-hover:text-white transition duration-200">
-                                    <i class="fa-solid ${product.icon} text-xl"></i>
-                                </div>
-                                <div>
-                                    <h3 class="font-bold text-white text-base leading-snug group-hover:text-brand-red transition">${product.name}</h3>
-                                    <p class="text-xs text-slate-400 font-medium mt-0.5">${product.size} • ${product.category}</p>
-                                </div>
-                            </div>
-
-                            <p class="text-xs text-slate-400 leading-relaxed mb-4 line-clamp-2">${product.desc}</p>
-
-                            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800/80 mb-4 text-[11px] text-slate-300">
-                                <span class="text-slate-500 font-bold block uppercase text-[10px]">Specifications / Approvals:</span>
-                                <span class="font-mono text-slate-200">${product.spec}</span>
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 flex items-center justify-between gap-3 shadow-sm">
+                        <!-- Product Info -->
+                        <div class="flex items-center space-x-3 space-x-reverse flex-grow">
+                            <img src="${imgSrc}" class="w-16 h-16 object-contain bg-slate-950 rounded-xl p-1 border border-slate-800 flex-shrink-0" onerror="this.src='https://via.placeholder.com/150?text=ZAMOIL'">
+                            <div>
+                                <span class="text-[10px] font-bold text-brand-red bg-brand-red/10 px-2 py-0.5 rounded uppercase">${item.Category || 'بەرهەم'}</span>
+                                <h2 class="text-sm font-bold text-white mt-1 leading-snug">${item.Title}</h2>
+                                <p class="text-[11px] text-slate-400 mt-0.5">${item.Spec || ''}</p>
+                                <div class="text-xs font-extrabold text-brand-red mt-1">${item.Price || ''}</div>
                             </div>
                         </div>
 
-                        <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between">
-                            <span class="text-xs text-slate-400 font-medium">Quantity to order:</span>
-                            <div class="flex items-center space-x-1">
-                                <button onclick="updateItemQuantity('${product.id}', -1)" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold flex items-center justify-center active:scale-95 transition">
-                                    <i class="fa-solid fa-minus text-xs"></i>
-                                </button>
-                                <span id="qty-${product.id}" class="w-8 text-center font-extrabold text-sm text-white">${currentQty}</span>
-                                <button onclick="updateItemQuantity('${product.id}', 1)" class="w-8 h-8 rounded-lg bg-brand-red hover:bg-red-600 text-white font-bold flex items-center justify-center active:scale-95 shadow-md shadow-brand-red/20 transition">
-                                    <i class="fa-solid fa-plus text-xs"></i>
-                                </button>
+                        <!-- Quantity Selector Controls -->
+                        <div class="flex flex-col items-end justify-center flex-shrink-0">
+                            <div class="flex items-center space-x-1 space-x-reverse bg-slate-950 border border-slate-800 rounded-xl p-1">
+                                <button onclick="updateQty(${index}, -1)" class="w-7 h-7 bg-slate-800 text-white rounded-lg flex items-center justify-center text-xs font-bold active:scale-95">-</button>
+                                <span class="w-6 text-center text-xs font-extrabold text-white">${qty}</span>
+                                <button onclick="updateQty(${index}, 1)" class="w-7 h-7 bg-brand-red text-white rounded-lg flex items-center justify-center text-xs font-bold active:scale-95">+</button>
                             </div>
                         </div>
                     </div>
                 `;
                 grid.insertAdjacentHTML('beforeend', cardHtml);
             });
+
+            updateCartSummary();
         }
 
-        // Cart Logic
-        function updateItemQuantity(productId, delta) {
-            const product = sampleProducts.find(p => p.id === productId);
-            if (!product) return;
-
-            let item = cart.find(i => i.id === productId);
-
-            if (!item) {
-                if (delta > 0) {
-                    cart.push({ ...product, qty: delta });
-                    showToast(`Added ${product.name} to list`);
-                }
-            } else {
-                item.qty += delta;
-                if (item.qty <= 0) {
-                    cart = cart.filter(i => i.id !== productId);
-                    showToast(`Removed from list`);
-                }
-            }
-
-            saveCartToStorage();
-            updateCartUI();
-            
-            // Update quantity number on card if visible
-            const qtySpan = document.getElementById(`qty-${productId}`);
-            if (qtySpan) {
-                const currentItem = cart.find(i => i.id === productId);
-                qtySpan.innerText = currentItem ? currentItem.qty : 0;
-            }
-        }
-
-        function updateCartUI() {
-            const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
-            document.getElementById('cartBadge').innerText = totalCount;
-            document.getElementById('drawerTotalCount').innerText = totalCount;
-
-            const container = document.getElementById('cartItemsContainer');
-            container.innerHTML = '';
-
-            if (cart.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-12 text-slate-500">
-                        <i class="fa-solid fa-cart-shopping text-4xl mb-3 text-slate-600"></i>
-                        <p class="text-sm font-semibold">Your order list is empty.</p>
-                        <p class="text-xs mt-1">Add items from the catalog to build your order.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            cart.forEach(item => {
-                const itemHtml = `
-                    <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 flex items-center justify-between">
-                        <div class="pr-2">
-                            <h4 class="text-xs font-bold text-white">${item.name}</h4>
-                            <div class="flex items-center space-x-2 mt-1">
-                                <span class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-mono">SKU: ${item.sku}</span>
-                                <span class="text-[10px] text-brand-red font-semibold">${item.size}</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <div class="flex items-center space-x-1 bg-slate-900 border border-slate-800 rounded-lg p-1">
-                                <button onclick="updateItemQuantity('${item.id}', -1)" class="w-6 h-6 bg-slate-800 text-slate-200 rounded flex items-center justify-center text-xs hover:bg-slate-700">-</button>
-                                <span class="w-6 text-center text-xs font-bold text-white">${item.qty}</span>
-                                <button onclick="updateItemQuantity('${item.id}', 1)" class="w-6 h-6 bg-brand-red text-white rounded flex items-center justify-center text-xs hover:bg-red-600">+</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                container.insertAdjacentHTML('beforeend', itemHtml);
+        function setCategory(cat, btn) {
+            activeCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(b => {
+                b.classList.remove('bg-brand-red', 'text-white');
+                b.classList.add('bg-slate-800', 'text-slate-300');
             });
+            btn.classList.remove('bg-slate-800', 'text-slate-300');
+            btn.classList.add('bg-brand-red', 'text-white');
+            renderProducts();
         }
 
-        function toggleCartDrawer(open) {
-            const drawer = document.getElementById('cartDrawer');
-            const backdrop = document.getElementById('cartDrawerBackdrop');
-            if (open) {
-                drawer.classList.remove('translate-x-full');
-                backdrop.classList.remove('hidden');
-            } else {
-                drawer.classList.add('translate-x-full');
-                backdrop.classList.add('hidden');
-            }
+        function filterProducts() {
+            renderProducts();
         }
 
-        function clearCart() {
-            if (confirm('Are you sure you want to clear your entire order list?')) {
-                cart = [];
-                saveCartToStorage();
-                updateCartUI();
-                renderProducts();
-                toggleCartDrawer(false);
-                showToast('Order list cleared', 'fa-trash-can');
-            }
+        function updateQty(index, delta) {
+            if (!cart[index]) cart[index] = 0;
+            cart[index] += delta;
+            if (cart[index] < 0) cart[index] = 0;
+            if (cart[index] === 0) delete cart[index];
+            renderProducts();
         }
 
-        function saveCartToStorage() {
-            localStorage.setItem('valv_order_cart', JSON.stringify(cart));
+        function updateCartSummary() {
+            let totalItems = 0;
+            Object.values(cart).forEach(q => totalItems += q);
+            document.getElementById('totalSelectedCount').innerText = `${totalItems} بەرهەم`;
         }
 
-        function loadCartFromStorage() {
-            const saved = localStorage.getItem('valv_order_cart');
-            if (saved) {
-                try { cart = JSON.parse(saved); } catch (e) { cart = []; }
-            }
-        }
-
-        // WhatsApp Export
         function sendOrderViaWhatsApp() {
-            if (cart.length === 0) {
-                alert('Please add at least one product to your order list before sending.');
+            const keys = Object.keys(cart);
+            if (keys.length === 0) {
+                alert('تکایە سەرەتا لایەنی کەم بەرهەمێک دیاری بکە بۆ داواکردن.');
                 return;
             }
 
-            const notes = document.getElementById('orderNotes').value.trim();
+            let msg = `*📦 داواکاری نوێ لە زامۆیل (فەرمی)*\n-----------------------------------\n\n`;
             
-            let message = `*📦 NEW VALVOLINE ORDER / INQUIRY*\n`;
-            if (notes) {
-                message += `*Customer/Garage:* ${notes}\n`;
-            }
-            message += `-----------------------------------\n\n`;
-
-            cart.forEach((item, index) => {
-                message += `${index + 1}. *${item.name}*\n`;
-                message += `   • Qty: *${item.qty}* (${item.size})\n`;
-                message += `   • SKU: ${item.sku}\n\n`;
+            keys.forEach((index, i) => {
+                const item = productsData[index];
+                const qty = cart[index];
+                msg += `${i + 1}. *${item.Title}*\n`;
+                msg += `   • بڕ: *${qty}* | نرخ: ${item.Price || 'نادیار'}\n`;
+                if (item.Spec) msg += `   • جۆر: ${item.Spec}\n`;
+                msg += `\n`;
             });
 
-            message += `-----------------------------------\n`;
-            message += `_Sent via ZAMOIL Web Catalog_`;
+            msg += `-----------------------------------\n_نێردرا لە ڕێگەی کەتەلۆگی ئەلیکترۆنی زامۆیل_`;
 
-            const encodedMessage = encodeURIComponent(message);
-            const whatsappUrl = `https://wa.me/${storePhoneNumber}?text=${encodedMessage}`;
-            
-            window.open(whatsappUrl, '_blank');
+            const url = `https://wa.me/${storePhoneNumber}?text=${encodeURIComponent(msg)}`;
+            window.open(url, '_blank');
         }
 
-        // Configuration Modal Logic
-        function openConfigModal() {
-            document.getElementById('configModal').classList.remove('hidden');
-        }
-
-        function closeConfigModal() {
-            document.getElementById('configModal').classList.add('hidden');
-        }
-
+        function openConfigModal() { document.getElementById('configModal').classList.remove('hidden'); }
+        function closeConfigModal() { document.getElementById('configModal').classList.add('hidden'); }
         function saveConfig() {
-            const phoneInput = document.getElementById('storePhoneInput').value.trim();
-            if (!phoneInput) {
-                alert('Please enter a valid phone number.');
-                return;
+            const val = document.getElementById('storePhoneInput').value.trim();
+            if (val) {
+                storePhoneNumber = val;
+                localStorage.setItem('zamoil_phone', storePhoneNumber);
+                closeConfigModal();
+                alert('ژمارەی وەتسአپ بە سەرکەوتوویی پاشەکەوت کرا.');
             }
-            storePhoneNumber = phoneInput;
-            localStorage.setItem('valv_store_phone', storePhoneNumber);
-            closeConfigModal();
-            showToast('WhatsApp number updated successfully!');
-        }
-
-        // Toast Notifications
-        function showToast(msg, iconClass = 'fa-circle-check') {
-            const toast = document.getElementById('toast');
-            const msgEl = document.getElementById('toastMsg');
-            const iconEl = document.getElementById('toastIcon');
-
-            msgEl.innerText = msg;
-            iconEl.className = `fa-solid ${iconClass} text-emerald-400 text-lg`;
-
-            toast.classList.remove('opacity-0', 'pointer-events-none');
-            toast.classList.add('opacity-100');
-
-            setTimeout(() => {
-                toast.classList.remove('opacity-100');
-                toast.classList.add('opacity-0', 'pointer-events-none');
-            }, 2500);
         }
     </script>
 </body>
