@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Valvoline Store & Engine Filters</title>
+    <title>ZAMOIL | Valvoline & Engine Filters</title>
     <style>
         :root {
             --brand-red: #e31837;
@@ -25,10 +25,10 @@
         body {
             background-color: var(--bg-gray);
             color: var(--text-main);
-            padding-bottom: 20px;
+            padding-bottom: 24px;
         }
 
-        /* Mobile Header */
+        /* Header */
         header {
             background: linear-gradient(135deg, var(--brand-blue), #00182b);
             color: white;
@@ -47,27 +47,24 @@
         }
 
         .brand-title {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 800;
             letter-spacing: 0.5px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
         .brand-badge {
             background: var(--brand-red);
             font-size: 10px;
-            padding: 2px 6px;
+            padding: 3px 7px;
             border-radius: 4px;
             text-transform: uppercase;
+            font-weight: 700;
         }
 
         /* Search Bar */
-        .search-box {
-            position: relative;
-        }
-
         .search-box input {
             width: 100%;
             padding: 10px 14px;
@@ -78,7 +75,7 @@
             background: rgba(255, 255, 255, 0.95);
         }
 
-        /* Categories Bar */
+        /* Categories Filter Bar */
         .categories {
             display: flex;
             gap: 8px;
@@ -151,7 +148,7 @@
             font-size: 14px;
             font-weight: 700;
             line-height: 1.2;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .card-spec {
@@ -179,9 +176,17 @@
             display: block;
         }
 
+        .loading-text {
+            text-align: center;
+            grid-column: span 2;
+            padding: 40px;
+            color: var(--text-sub);
+            font-size: 14px;
+        }
+
         .footer-info {
             text-align: center;
-            padding: 20px 16px;
+            padding: 16px;
             font-size: 12px;
             color: var(--text-sub);
         }
@@ -192,7 +197,7 @@
     <header>
         <div class="header-top">
             <div class="brand-title">
-                VALVOLINE <span class="brand-badge">STORE</span>
+                ZAMOIL <span class="brand-badge">Valvoline</span>
             </div>
         </div>
         <div class="search-box">
@@ -202,87 +207,88 @@
 
     <div class="categories">
         <button class="cat-btn active" onclick="selectCat('all', this)">All Products</button>
-        <button class="cat-btn" onclick="selectCat('oil', this)">Engine Oils</button>
-        <button class="cat-btn" onclick="selectCat('filter', this)">Oil Filters</button>
+        <button class="cat-btn" onclick="selectCat('Engine Oil', this)">Engine Oils</button>
+        <button class="cat-btn" onclick="selectCat('Filter', this)">Oil Filters</button>
     </div>
 
     <div class="grid" id="productGrid">
-        <!-- Product 1 -->
-        <div class="card" data-cat="oil" data-title="valvoline 5w-30 full synthetic">
-            <div>
-                <img src="https://via.placeholder.com/150?text=5W-30+Valvoline" alt="Valvoline 5W-30">
-                <div class="card-tag">Engine Oil</div>
-                <div class="card-title">Valvoline 5W-30 Advanced</div>
-                <div class="card-spec">Full Synthetic • 4 Liters</div>
-            </div>
-            <div>
-                <div class="card-price">$35.00</div>
-                <a href="https://wa.me/?text=Hello!%20I%20want%20to%20order%20Valvoline%205W-30%20Advanced" class="order-btn" target="_blank">Order on WhatsApp</a>
-            </div>
-        </div>
-
-        <!-- Product 2 -->
-        <div class="card" data-cat="oil" data-title="valvoline 10w-40 maxlife">
-            <div>
-                <img src="https://via.placeholder.com/150?text=10W-40+Valvoline" alt="Valvoline 10W-40">
-                <div class="card-tag">Engine Oil</div>
-                <div class="card-title">Valvoline 10W-40 MaxLife</div>
-                <div class="card-spec">Synthetic Blend • 4 Liters</div>
-            </div>
-            <div>
-                <div class="card-price">$30.00</div>
-                <a href="https://wa.me/?text=Hello!%20I%20want%20to%20order%20Valvoline%2010W-40%20MaxLife" class="order-btn" target="_blank">Order on WhatsApp</a>
-            </div>
-        </div>
-
-        <!-- Product 3 -->
-        <div class="card" data-cat="filter" data-title="engine oil filter premium">
-            <div>
-                <img src="https://via.placeholder.com/150?text=Oil+Filter" alt="Engine Oil Filter">
-                <div class="card-tag">Filter</div>
-                <div class="card-title">Premium Engine Oil Filter</div>
-                <div class="card-spec">High Efficiency • Universal Fit</div>
-            </div>
-            <div>
-                <div class="card-price">$10.00</div>
-                <a href="https://wa.me/?text=Hello!%20I%20want%20to%20order%20Premium%20Engine%20Oil%20Filter" class="order-btn" target="_blank">Order on WhatsApp</a>
-            </div>
-        </div>
+        <div class="loading-text">Loading catalog...</div>
     </div>
 
     <div class="footer-info">
-        <p>Valvoline Motor Oils & Filters</p>
-        <p>Tap any item to order via WhatsApp directly</p>
+        <p>Valvoline Lubricants & Filters</p>
+        <p>Tap any item to order on WhatsApp</p>
     </div>
 
     <script>
+        // STEP: Paste your Google Sheet ID inside the single quotes below
+        const SHEET_ID = 'YOUR_GOOGLE_SHEET_ID_HERE';
+        
+        // STEP: Paste your WhatsApp number with country code inside the single quotes below (e.g. 9647501234567)
+        const WHATSAPP_NUMBER = 'YOUR_WHATSAPP_NUMBER_HERE';
+
+        let productsData = [];
         let activeCategory = 'all';
+
+        async function fetchProducts() {
+            try {
+                const response = await fetch(`https://opensheet.elk.sh/${SHEET_ID}/1`);
+                productsData = await response.json();
+                renderProducts();
+            } catch (error) {
+                document.getElementById('productGrid').innerHTML = '<div class="loading-text">Error loading products. Make sure your Google Sheet is set to "Anyone with the link can view" and the Sheet ID is correct.</div>';
+            }
+        }
+
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            grid.innerHTML = '';
+
+            const filtered = productsData.filter(item => {
+                const titleMatch = (item.Title || '').toLowerCase().includes(query);
+                const specMatch = (item.Spec || '').toLowerCase().includes(query);
+                const catMatch = activeCategory === 'all' || item.Category === activeCategory;
+                return (titleMatch || specMatch) && catMatch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div class="loading-text">No matching products found.</div>';
+                return;
+            }
+
+            filtered.forEach(item => {
+                const message = encodeURIComponent(`Hello! I want to order: ${item.Title} (${item.Price})`);
+                const cardHtml = `
+                    <div class="card">
+                        <div>
+                            <img src="${item.ImageURL || 'https://via.placeholder.com/150?text=Valvoline'}" alt="${item.Title}">
+                            <div class="card-tag">${item.Category || 'Product'}</div>
+                            <div class="card-title">${item.Title}</div>
+                            <div class="card-spec">${item.Spec || ''}</div>
+                        </div>
+                        <div>
+                            <div class="card-price">${item.Price}</div>
+                            <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${message}" class="order-btn" target="_blank">Order on WhatsApp</a>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += cardHtml;
+            });
+        }
 
         function selectCat(cat, btn) {
             activeCategory = cat;
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            filterProducts();
+            renderProducts();
         }
 
         function filterProducts() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const cards = document.querySelectorAll('.card');
-
-            cards.forEach(card => {
-                const title = card.getAttribute('data-title');
-                const cat = card.getAttribute('data-cat');
-                
-                const matchesCat = (activeCategory === 'all' || cat === activeCategory);
-                const matchesSearch = title.includes(query);
-
-                if (matchesCat && matchesSearch) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+            renderProducts();
         }
+
+        fetchProducts();
     </script>
 </body>
 </html>
